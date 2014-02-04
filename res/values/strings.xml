@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LumiRo Merchant Monitoring</string>
+    <string name="confrim_delete_merc">Вы действительно хотите удалить "%s"?</string>
+    <string name="default_merc">ДжаРастафарай</string>
+</resources>
