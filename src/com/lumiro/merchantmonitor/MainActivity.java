@@ -3,6 +3,7 @@ package com.lumiro.merchantmonitor;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -71,6 +72,14 @@ public class MainActivity extends Activity {
         sync_merc_list_with_db();
 
         Toast.makeText(this, item.encodeJson(),Toast.LENGTH_SHORT).show();
+    }
+
+    public void startService(View view){
+        startService(new Intent(this, Market_Service.class));
+    }
+
+    public void stopService(View view){
+        startService(new Intent(this, Market_Service.class));
     }
 
     public void syncMercList(View view){

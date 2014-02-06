@@ -20,15 +20,29 @@
                 android:id="@+id/add_merc_btn"
             android:onClick="addMerc" />
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sync"
-        android:id="@+id/sync_btn"
-        android:layout_gravity="center_horizontal"
-        android:onClick="syncMercList" />
-
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sync"
+                android:id="@+id/sync_btn"
+                android:onClick="syncMercList" />
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start service"
+                android:id="@+id/start_service_btn"
+                android:onClick="startService" />
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stop service"
+                android:id="@+id/stop_service_btn"
+                android:onClick="stopService" />
+    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
