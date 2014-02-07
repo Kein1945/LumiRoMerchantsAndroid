@@ -80,12 +80,36 @@ public class MercDB extends SQLiteOpenHelper {
             String name = cursor.getString(cursor.getColumnIndex(MercDB.NAME));
             merc = new Merc();
             merc.setName(name);
+            String items = cursor.getString(cursor.getColumnIndex(MercDB.ITEMS));
+            merc.setItems(Item.decodeJSONItems(items));
             mercs.add(merc);
         }
         return mercs;
     }
 
+    public Merc getMercByName(String name){
+        //:TODO Сделать нормальную выборку
+        SQLiteDatabase wwd = this.getReadableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE name = '" + name + "'";
+        Cursor cursor = wwd.rawQuery(query, null);
+
+        Merc merc = new Merc();
+        merc.setName(name);
+        while (cursor.moveToNext()) {
+            String items = cursor.getString(cursor.getColumnIndex(MercDB.ITEMS));
+            merc.setItems(Item.decodeJSONItems(items));
+        }
+        return merc;
+    }
+
     public void removeMerc(Merc merc){
         getWritableDatabase().delete(TABLE_NAME, NAME + "=\""+merc.getName()+"\"",null);
+    }
+     public void updateMerc(Merc merc){
+        ContentValues values = new ContentValues();
+        values.put(NAME, merc.getName());
+        values.put(ITEMS, Item.encodeJSONItems(merc.getItems()));
+        getWritableDatabase().insert(TABLE_NAME, null, values);
     }
 }

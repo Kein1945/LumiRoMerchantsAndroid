@@ -1,6 +1,7 @@
 package com.lumiro.merchantmonitor.Market;
 
 import android.util.Log;
+import com.lumiro.merchantmonitor.Item;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,6 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by kein on 07/02/14.
@@ -20,6 +25,16 @@ public class Parser {
     private static final String TAG = "net.lumiro.market.parser";
 
     public static final String SELL_URI = "http://market.lumiro.net/whosell.php?field=price&order=asc&s=";
+
+    private static final String ResultMatchRegExp = "tr\\sclass=\"line(?:[\\s\\S]*?)div\\sstyle=\"([\\s\\S]*?)\"(?:[\\s\\S]*?)<small>([\\d\\+]*)<\\/small>(?:[\\s\\S]*?)javascript:perf\\('([\\d]+)'\\);\">([^<]+?)<\\/a>([\\s\\S]*?)<\\/td>(?:[\\s\\S]*?)class=\"value\">([\\s\\S]*?)class=\"value\"\\salign=\"right\">([^<]+)<(?:[\\s\\S]*?)align=\"center\">([^<]+)(?:[\\s\\S]*?)class=\"trader(?:[\\s\\S]*?)<a[^>]+>([^<]+)";
+    private static Pattern parseRegExp;
+
+    public static Pattern getParser(){
+        if(parseRegExp == null){
+            parseRegExp = Pattern.compile(ResultMatchRegExp);
+        }
+        return parseRegExp;
+    }
 
     public static String getSellItems(String search) {
         String url = SELL_URI;
@@ -48,7 +63,46 @@ public class Parser {
             Log.e(TAG, "Read html failed. IOException");
             return "";
         }
-        Log.d(TAG, html);
         return html;
+    }
+
+    //        style : re[1],
+//                id: re[3],
+//                name: creator+ re[4]+re[5].trim().replace(/\<a\shref=\"http:\/\/www.poring.ru\/.*?>[\s\S]*<img.*?>[\s\S]*?\<\/a>/gim, ''),
+//        refain: re[2],
+//                price: re[7],
+//                real_price: re[7].replace(/\./g,''),
+//        profit: 0,
+//                count: re[8],
+//                nowcount: re[8],
+//                attr: tmp_cards,
+//                owner: re[9],
+    public static List<Item> getItems(String search){
+        String response = getSellItems(search);
+        Log.d(TAG, response);
+
+        List<Item> items = new ArrayList<Item>();
+        Matcher m = getParser().matcher(response);
+
+
+        while(m.find()) {
+            Item item = new Item();
+            item.setId(Integer.parseInt(m.group(3)));
+            Integer refain = 0;
+            try {
+                refain = Integer.parseInt(m.group(2));
+            } catch(NumberFormatException e) {}
+            item.setRefain( refain );
+            item.setPrice(Integer.parseInt(m.group(7).replace(".","")));
+            item.setCount(Integer.parseInt(m.group(8)));
+            item.setNow_count(item.getCount());
+            item.setName(m.group(4));
+            item.setAttr("");
+            item.setOwner(m.group(9));
+            items.add(item);
+            Log.d(TAG, item.toString());
+        }
+        Log.d(TAG, "Items count: " + String.valueOf(items.size()));
+        return items;
     }
 }

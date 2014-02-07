@@ -1,8 +1,13 @@
 package com.lumiro.merchantmonitor;
 
 import android.widget.Toast;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by kein on 04/02/14.
@@ -11,9 +16,7 @@ public class Item {
     private Integer id;
     private String name;
     private Integer refain;
-    private String price;
-    private Integer real_price;
-    private Integer profit;
+    private Integer price;
     private Integer count;
     private Integer now_count;
     private String attr;
@@ -27,9 +30,7 @@ public class Item {
 
             this.setName( item.getString("name"));
             this.setRefain(item.getInt("refain"));
-            this.setPrice( item.getString("price"));
-            this.setReal_price(item.getInt("real_price"));
-            this.setProfit(item.getInt("profit"));
+            this.setPrice( item.getInt("price"));
             this.setCount(item.getInt("count"));
             this.setNow_count(item.getInt("now_count"));
             this.setAttr( item.getString("attr"));
@@ -40,25 +41,6 @@ public class Item {
         }
     }
 
-    public JSONObject getJSON(){
-        JSONObject item = new JSONObject();
-        try {
-            item.put("id", this.id );
-            item.put("name", this.name );
-            item.put("refain", this.refain );
-            item.put("price", this.price );
-            item.put("real_price", this.real_price );
-            item.put("profit", this.profit );
-            item.put("count", this.count );
-            item.put("now_count", this.now_count );
-            item.put("attr", this.attr );
-            item.put("owner", this.owner );
-        } catch (JSONException e){
-
-        }
-        return item;
-    }
-
     public String encodeJson(){
         try {
             JSONObject item = new JSONObject();
@@ -66,8 +48,6 @@ public class Item {
             item.put("name", this.name );
             item.put("refain", this.refain );
             item.put("price", this.price );
-            item.put("real_price", this.real_price );
-            item.put("profit", this.profit );
             item.put("count", this.count );
             item.put("now_count", this.now_count );
             item.put("attr", this.attr );
@@ -77,6 +57,51 @@ public class Item {
 //            e.printStackTrace();
             return "{}";
         }
+    }
+
+    public String toString(){
+        return encodeJson();
+    }
+
+    public static List<Item> decodeJSONItems(String json){
+        List<Item> items = new ArrayList<Item>();
+        try {
+            JSONArray json_items = new JSONArray(json);
+            for(Integer i=0; i< json_items.length(); i++){
+                Item item = new Item();
+                JSONObject jitem = (JSONObject)json_items.get(i);
+                item.setId( jitem.getInt("id") );
+                item.setName(jitem.getString("name"));
+                item.setRefain(jitem.getInt("refain"));
+                item.setPrice(jitem.getInt("price"));
+                item.setCount(jitem.getInt("count"));
+                item.setNow_count(jitem.getInt("now_count"));
+                item.setAttr(jitem.getString("attr"));
+                item.setOwner(jitem.getString("owner"));
+                items.add(item);
+            }
+        } catch (JSONException e) {
+        }
+        return items;
+    }
+
+    public static String encodeJSONItems(List<Item> items){
+        JSONArray jitems = new JSONArray();
+        for(Item item: items){
+            JSONObject jitem = new JSONObject();
+            try {
+                jitem.put("id", item.getId());
+                jitem.put("name", item.getName());
+                jitem.put("refain", item.getRefain());
+                jitem.put("price", item.getPrice());
+                jitem.put("count", item.getCount());
+                jitem.put("now_count", item.getNow_count());
+                jitem.put("attr", item.getAttr());
+                jitem.put("owner", item.getOwner());
+                jitems.put(jitem);
+            } catch (JSONException e) {}
+        }
+        return jitems.toString();
     }
 
     public Integer getId() {
@@ -103,29 +128,18 @@ public class Item {
         this.refain = refain;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public Integer getReal_price() {
-        return real_price;
-    }
-
-    public void setReal_price(Integer real_price) {
-        this.real_price = real_price;
-    }
-
     public Integer getProfit() {
-        return profit;
+        return (getCount() - getNow_count()) * getPrice();
     }
 
-    public void setProfit(Integer profit) {
-        this.profit = profit;
-    }
 
     public Integer getCount() {
         return count;

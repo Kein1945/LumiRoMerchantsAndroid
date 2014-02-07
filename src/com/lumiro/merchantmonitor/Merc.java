@@ -44,6 +44,6 @@ public class Merc {
     }
 
     public String toString(){
-        return getName();
+        return getName() + "(" + String.valueOf(getItems().size()) + ")";
     }
 }
