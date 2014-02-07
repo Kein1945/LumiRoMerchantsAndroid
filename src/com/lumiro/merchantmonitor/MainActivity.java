@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.lumiro.merchantmonitor.Market.Parser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,8 +79,14 @@ public class MainActivity extends Activity {
         startService(new Intent(this, Market_Service.class));
     }
 
-    public void stopService(View view){
-        startService(new Intent(this, Market_Service.class));
+    public void parse(View view){
+        Intent i = new Intent(this, Market_Service.class);
+        i.setAction(Market_Service.ACTION_SYNC_MERC);
+
+        String mercName = ((EditText)findViewById(R.id.new_merc)).getText().toString();
+        i.putExtra("merc_name", mercName);
+
+        startService(i);
     }
 
     public void syncMercList(View view){

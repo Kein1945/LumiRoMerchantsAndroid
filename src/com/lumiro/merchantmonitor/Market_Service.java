@@ -4,7 +4,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
+import com.lumiro.merchantmonitor.Market.Parser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,55 +16,30 @@ import java.util.TimerTask;
 /**
  * Created by kein on 06/02/14.
  */
-public class Market_Service extends Service {
+public class Market_Service extends Service implements Runnable {
+    private static final String TAG = "net.lumiro.market.market_service";
 
-    // constant
-    public static final long NOTIFY_INTERVAL = 10 * 1000; // 10 seconds
+    public String mercName;
 
-    // run on another Thread to avoid crash
-    private Handler mHandler = new Handler();
-    // timer handling
-    private Timer mTimer = null;
+    public static final String ACTION_SYNC_MERC = "com.lumiro.merchantmonitor.SYNC_MERC";
 
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    @Override
-    public void onCreate() {
-        // cancel if already existed
-        if(mTimer != null) {
-            mTimer.cancel();
-        } else {
-            // recreate new
-            mTimer = new Timer();
+    public int onStartCommand (Intent intent, int flags, int startId){
+        if (ACTION_SYNC_MERC.equals(intent.getAction())) {
+            mercName = intent.getStringExtra("merc_name");
+
+            Thread t = new Thread(this);
+            t.start();
         }
-        // schedule task
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, NOTIFY_INTERVAL);
+        return START_STICKY;
     }
 
-    class TimeDisplayTimerTask extends TimerTask {
-
-        @Override
-        public void run() {
-            // run on another thread
-            mHandler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    // display toast
-                    Toast.makeText(getApplicationContext(), getDateTime(),
-                            Toast.LENGTH_SHORT).show();
-                }
-
-            });
-        }
-
-        private String getDateTime() {
-            // get date time in custom format
-            SimpleDateFormat sdf = new SimpleDateFormat("[yyyy/MM/dd - HH:mm:ss]");
-            return sdf.format(new Date());
-        }
-
+    @Override
+    public void run() {
+        Log.d(TAG, "Requested SYNC_MERC action ["+mercName+"]");
+        Parser.getSellItems(mercName);
     }
 }
