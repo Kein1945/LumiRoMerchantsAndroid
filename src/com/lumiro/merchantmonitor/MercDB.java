@@ -88,18 +88,19 @@ public class MercDB extends SQLiteOpenHelper {
     }
 
     public Merc getMercByName(String name){
-        //:TODO Сделать нормальную выборку
-        SQLiteDatabase wwd = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE name = '" + name + "'";
-        Cursor cursor = wwd.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, null);
 
         Merc merc = new Merc();
         merc.setName(name);
-        while (cursor.moveToNext()) {
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
             String items = cursor.getString(cursor.getColumnIndex(MercDB.ITEMS));
             merc.setItems(Item.decodeJSONItems(items));
         }
+        cursor.close();
         return merc;
     }
 
@@ -107,9 +108,14 @@ public class MercDB extends SQLiteOpenHelper {
         getWritableDatabase().delete(TABLE_NAME, NAME + "=\""+merc.getName()+"\"",null);
     }
      public void updateMerc(Merc merc){
-        ContentValues values = new ContentValues();
-        values.put(NAME, merc.getName());
-        values.put(ITEMS, Item.encodeJSONItems(merc.getItems()));
-        getWritableDatabase().insert(TABLE_NAME, null, values);
-    }
+         SQLiteDatabase db = getWritableDatabase();
+
+         ContentValues values = new ContentValues();
+         values.put(NAME, merc.getName());
+         values.put(ITEMS, Item.encodeJSONItems(merc.getItems()));
+
+         db.insert(TABLE_NAME, null, values);
+         db.replace(TABLE_NAME, NAME + "=\"" + merc.getName() + "\"", values);
+
+     }
 }

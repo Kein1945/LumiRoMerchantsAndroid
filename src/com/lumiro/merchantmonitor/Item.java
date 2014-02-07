@@ -22,25 +22,6 @@ public class Item {
     private String attr;
     private String owner;
 
-    public void decodeJSON(String jsonItems){
-        try{
-            JSONObject item = new JSONObject(jsonItems);
-//            Toast.makeText(this, merc.getString("name"), Toast.LENGTH_SHORT).show();
-            this.setId( item.getInt("id") );
-
-            this.setName( item.getString("name"));
-            this.setRefain(item.getInt("refain"));
-            this.setPrice( item.getInt("price"));
-            this.setCount(item.getInt("count"));
-            this.setNow_count(item.getInt("now_count"));
-            this.setAttr( item.getString("attr"));
-            this.setOwner(item.getString("owner"));
-        } catch (JSONException e){
-
-//            e.printStackTrace();
-        }
-    }
-
     public String encodeJson(){
         try {
             JSONObject item = new JSONObject();

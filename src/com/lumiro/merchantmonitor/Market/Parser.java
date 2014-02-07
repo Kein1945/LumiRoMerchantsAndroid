@@ -66,17 +66,6 @@ public class Parser {
         return html;
     }
 
-    //        style : re[1],
-//                id: re[3],
-//                name: creator+ re[4]+re[5].trim().replace(/\<a\shref=\"http:\/\/www.poring.ru\/.*?>[\s\S]*<img.*?>[\s\S]*?\<\/a>/gim, ''),
-//        refain: re[2],
-//                price: re[7],
-//                real_price: re[7].replace(/\./g,''),
-//        profit: 0,
-//                count: re[8],
-//                nowcount: re[8],
-//                attr: tmp_cards,
-//                owner: re[9],
     public static List<Item> getItems(String search){
         String response = getSellItems(search);
         Log.d(TAG, response);
