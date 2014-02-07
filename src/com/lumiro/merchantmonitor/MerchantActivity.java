@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 /**
  * Created by kein on 07/02/14.
  */
@@ -18,13 +20,9 @@ public class MerchantActivity extends Activity {
         MercDB db = new MercDB(this);
         Merc merc = db.getMercByName(mercName);
 
-        ArrayAdapter<Item> adapter = new ArrayAdapter<Item>(this,
-                android.R.layout.simple_list_item_1);
+        ItemArrayAdapter adapter = new ItemArrayAdapter (this, (ArrayList)merc.getItems());
         ListView mercListView = new ListView(getApplicationContext());
         mercListView.setAdapter(adapter);
-        for(Item item : merc.getItems()){
-            adapter.add(item);
-        }
 
 
         setTitle(mercName);

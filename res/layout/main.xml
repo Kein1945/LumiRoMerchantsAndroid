@@ -19,12 +19,6 @@
                 android:text="Add"
                 android:id="@+id/add_merc_btn"
             android:onClick="addMerc" />
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parse"
-                android:id="@+id/parse_btn"
-                android:onClick="parse" />
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -35,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:text="Sync"
                 android:id="@+id/sync_btn"
-                android:onClick="syncMercList" />
+                android:onClick="syncMercList"
+            android:textSize="18dp" />
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
