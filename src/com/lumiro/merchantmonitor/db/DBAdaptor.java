@@ -55,7 +55,7 @@ public class DBAdaptor extends SQLiteOpenHelper {
         // внесение данных
         ContentValues values = new ContentValues();
         values.put(NAME, merc.getName());
-        values.put(ITEMS, merc.encodeItemsJSON());
+        values.put(ITEMS, MerchantAdapter.encodeItemsJSON(merc.getItems()));
         try{
             wwd.insert(TABLE_NAME, null, values);
         } catch(android.database.sqlite.SQLiteConstraintException e){

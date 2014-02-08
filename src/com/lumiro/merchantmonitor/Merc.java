@@ -15,14 +15,6 @@ public class Merc {
         this.items = new ArrayList<Item>();
     }
 
-    public String encodeItemsJSON(){
-        JSONArray jitems = new JSONArray();
-        for(Item item : items){
-            jitems.put(item);
-        }
-        return jitems.toString();
-    }
-
     public void addItem(Item item){
         this.items.add(item);
     }
