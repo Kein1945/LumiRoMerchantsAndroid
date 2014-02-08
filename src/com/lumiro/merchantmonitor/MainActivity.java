@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-import com.lumiro.merchantmonitor.Market.Parser;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.lumiro.merchantmonitor.db.DBAdaptor;
 
 import java.util.List;
 
@@ -18,7 +15,7 @@ public class MainActivity extends Activity {
 
     public static final String EXTRA_MERCH = "com.lumiro.merchantmonitor.MERC_NAME";
 
-    MercDB db;
+    DBAdaptor db;
 
     ListView mercListView;
 
@@ -30,7 +27,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        db = new MercDB(this);
+        db = new DBAdaptor(this);
 
         ArrayAdapter<Merc> adapter = new ArrayAdapter<Merc>(this,
                 android.R.layout.simple_list_item_1);

@@ -1,10 +1,12 @@
-package com.lumiro.merchantmonitor;
+package com.lumiro.merchantmonitor.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.lumiro.merchantmonitor.Item;
+import com.lumiro.merchantmonitor.Merc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 /**
  * Created by kein on 04/02/14.
  */
-public class MercDB extends SQLiteOpenHelper {
+public class DBAdaptor extends SQLiteOpenHelper {
 
     // константы для конструктора
     private static final String DATABASE_NAME = "merc_database.db";
@@ -23,7 +25,7 @@ public class MercDB extends SQLiteOpenHelper {
     public static final String NAME = "name";
     public static final String ITEMS = "items";
 
-    public MercDB(Context context) {
+    public DBAdaptor(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         // TODO Auto-generated constructor stub
     }
@@ -77,11 +79,11 @@ public class MercDB extends SQLiteOpenHelper {
         List<Merc> mercs = new ArrayList<Merc>();
         Merc merc;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(MercDB.NAME));
+            String name = cursor.getString(cursor.getColumnIndex(DBAdaptor.NAME));
             merc = new Merc();
             merc.setName(name);
-            String items = cursor.getString(cursor.getColumnIndex(MercDB.ITEMS));
-            merc.setItems(Item.decodeJSONItems(items));
+            String items = cursor.getString(cursor.getColumnIndex(DBAdaptor.ITEMS));
+            merc.setItems(ItemAdapter.decodeJSONItems(items));
             mercs.add(merc);
         }
         return mercs;
@@ -97,8 +99,8 @@ public class MercDB extends SQLiteOpenHelper {
         merc.setName(name);
         if(cursor.getCount() > 0){
             cursor.moveToFirst();
-            String items = cursor.getString(cursor.getColumnIndex(MercDB.ITEMS));
-            merc.setItems(Item.decodeJSONItems(items));
+            String items = cursor.getString(cursor.getColumnIndex(DBAdaptor.ITEMS));
+            merc.setItems(ItemAdapter.decodeJSONItems(items));
         }
         cursor.close();
         return merc;
@@ -112,7 +114,7 @@ public class MercDB extends SQLiteOpenHelper {
 
          ContentValues values = new ContentValues();
          values.put(NAME, merc.getName());
-         values.put(ITEMS, Item.encodeJSONItems(merc.getItems()));
+         values.put(ITEMS, ItemAdapter.encodeJSONItems(merc.getItems()));
 
          db.insert(TABLE_NAME, null, values);
          db.replace(TABLE_NAME, NAME + "=\"" + merc.getName() + "\"", values);

@@ -3,8 +3,8 @@ package com.lumiro.merchantmonitor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.lumiro.merchantmonitor.db.DBAdaptor;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class MerchantActivity extends Activity {
 
         Intent intent = getIntent();
         String mercName = intent.getStringExtra(MainActivity.EXTRA_MERCH);
-        MercDB db = new MercDB(this);
+        DBAdaptor db = new DBAdaptor(this);
         Merc merc = db.getMercByName(mercName);
 
         ItemArrayAdapter adapter = new ItemArrayAdapter (this, (ArrayList)merc.getItems());
