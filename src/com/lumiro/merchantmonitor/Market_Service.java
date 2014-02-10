@@ -14,6 +14,7 @@ import com.lumiro.merchantmonitor.db.DBAdaptor;
 import com.lumiro.merchantmonitor.db.ItemAdapter;
 import com.lumiro.merchantmonitor.helper.MerchantUpdater;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +23,10 @@ import java.util.List;
 public class Market_Service extends Service implements Runnable {
     private static final String TAG = "net.lumiro.market.market_service";
 
-    public String mercName;
+    public List<String> merchants = new ArrayList<String>();
 
     public static final String ACTION_SYNC_MERC = "com.lumiro.merchantmonitor.SYNC_MERC";
+    public static final String ACTION_SYNC_MERCS = "com.lumiro.merchantmonitor.SYNC_MERCS";
 
     public IBinder onBind(Intent intent) {
         return null;
@@ -37,8 +39,17 @@ public class Market_Service extends Service implements Runnable {
 
     public int onStartCommand (Intent intent, int flags, int startId){
         if (ACTION_SYNC_MERC.equals(intent.getAction())) {
-            mercName = intent.getStringExtra("merc_name");
+            merchants.add( intent.getStringExtra("merc_name") );
 
+            Thread t = new Thread(this);
+            t.start();
+        }
+        if (ACTION_SYNC_MERCS.equals(intent.getAction())) {
+            DBAdaptor db = new DBAdaptor(this);
+            List<Merc> mersc = db.getMercs();
+            for(Merc merc : mersc){
+                merchants.add( merc.getName() );
+            }
             Thread t = new Thread(this);
             t.start();
         }
@@ -47,27 +58,24 @@ public class Market_Service extends Service implements Runnable {
 
     @Override
     public void run() {
-        Log.d(TAG, "Requested SYNC_MERC action ["+mercName+"]");
-        DBAdaptor db = new DBAdaptor(this);
-        List<Item> items = Parser.getItems(mercName);
-        Merc merc = db.getMercByName(mercName);
+        for(String merchant_name : merchants){
+            Log.d(TAG, "Requested SYNC_MERC action ["+merchant_name+"]");
+            DBAdaptor db = new DBAdaptor(this);
+            List<Item> items = Parser.getItems(merchant_name);
+            Merc merc = db.getMercByName(merchant_name);
 
-        MerchantUpdater updater = new MerchantUpdater(merc);
-        if(items.size()>0){
-            Item item = items.get(0);
-            item.setCount(item.getCount()-1);
-        }
-        updater.updateItems(items);
+            MerchantUpdater updater = new MerchantUpdater(merc);
+            updater.updateItems(items);
 
-        if(updater.isNew()){
-            Log.d(TAG, "Merchant is new");
-        }
-        if(updater.isOffline()){
-            Log.d(TAG, "Merchant is offline");
-        }
+            if(updater.isNew()){
+                Log.d(TAG, "Merchant is new");
+            }
+            if(updater.isOffline()){
+                Log.d(TAG, "Merchant is offline");
+            }
 
-        db.updateMerc(merc);
-        merc = db.getMercByName(mercName);
-        Log.d(TAG, ItemAdapter.encodeJSONItems(merc.getItems()));
+            db.updateMerc(merc);
+            db.getMercByName(merchant_name);
+        }
     }
 }

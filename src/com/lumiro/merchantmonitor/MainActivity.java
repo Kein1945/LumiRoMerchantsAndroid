@@ -83,8 +83,10 @@ public class MainActivity extends Activity {
         startService(i);
     }
 
-    public void startService(View view){
-        startService(new Intent(this, Market_Service.class));
+    public void updateMerchants(View view){
+        Intent i = new Intent(this, Market_Service.class);
+        i.setAction(Market_Service.ACTION_SYNC_MERCS);
+        startService(i);
     }
 
 

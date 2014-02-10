@@ -34,15 +34,9 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start service"
-                android:id="@+id/start_service_btn"
-                android:onClick="startService" />
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stop service"
-                android:id="@+id/stop_service_btn"
-                android:onClick="stopService" />
+                android:text="Update merchants"
+                android:id="@+id/update_merchants"
+                android:onClick="updateMerchants" />
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"

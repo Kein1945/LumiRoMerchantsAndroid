@@ -68,7 +68,6 @@ public class Parser {
 
     public static List<Item> getItems(String search){
         String response = getSellItems(search);
-        Log.d(TAG, response);
 
         List<Item> items = new ArrayList<Item>();
         Matcher m = getParser().matcher(response);
@@ -89,7 +88,6 @@ public class Parser {
             item.setAttr("");
             item.setOwner(m.group(9));
             items.add(item);
-            Log.d(TAG, item.toString());
         }
         Log.d(TAG, "Items count: " + String.valueOf(items.size()));
         return items;
