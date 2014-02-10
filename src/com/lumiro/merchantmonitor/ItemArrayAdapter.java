@@ -32,11 +32,17 @@ public class ItemArrayAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.item_row, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.label);
         TextView countTextView = (TextView) rowView.findViewById(R.id.count);
+        TextView profitTextView = (TextView) rowView.findViewById(R.id.profit);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         Item item = (Item)values.get(position);
         textView.setText( item.getName() );
-        countTextView.setText(String.valueOf(item.getCount()));
+        countTextView.setText(String.valueOf(item.getNow_count()));
+
+        if(item.getNow_count() != item.getCount()){
+            Integer profit = (item.getCount() - item.getNow_count()) * item.getPrice();
+            profitTextView.setText("+"+String.valueOf( profit ));
+        }
 
 
         int image_resource_id = this.getContext().getResources().getIdentifier("item_" + String.valueOf(item.getId()), "drawable", "com.lumiro.merchantmonitor");

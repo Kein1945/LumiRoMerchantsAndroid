@@ -53,6 +53,10 @@ public class Market_Service extends Service implements Runnable {
         Merc merc = db.getMercByName(mercName);
 
         MerchantUpdater updater = new MerchantUpdater(merc);
+        if(items.size()>0){
+            Item item = items.get(0);
+            item.setCount(item.getCount()-1);
+        }
         updater.updateItems(items);
 
         if(updater.isNew()){
