@@ -1,12 +1,18 @@
 package com.lumiro.merchantmonitor;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 import com.lumiro.merchantmonitor.Market.Parser;
 import com.lumiro.merchantmonitor.db.DBAdaptor;
 import com.lumiro.merchantmonitor.db.ItemAdapter;
+import com.lumiro.merchantmonitor.helper.MerchantUpdater;
 
 import java.util.List;
 
@@ -45,9 +51,17 @@ public class Market_Service extends Service implements Runnable {
         DBAdaptor db = new DBAdaptor(this);
         List<Item> items = Parser.getItems(mercName);
         Merc merc = db.getMercByName(mercName);
-        for(Item item : items){
-            merc.addItem(item);
+
+        MerchantUpdater updater = new MerchantUpdater(merc);
+        updater.updateItems(items);
+
+        if(updater.isNew()){
+            Log.d(TAG, "Merchant is new");
         }
+        if(updater.isOffline()){
+            Log.d(TAG, "Merchant is offline");
+        }
+
         db.updateMerc(merc);
         merc = db.getMercByName(mercName);
         Log.d(TAG, ItemAdapter.encodeJSONItems(merc.getItems()));

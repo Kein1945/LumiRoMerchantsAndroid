@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">LumiRo Merchant Monitoring</string>
     <string name="confrim_delete_merc">Вы действительно хотите удалить "%s"?</string>
-    <string name="default_merc">WizBlacksmith</string>
+    <string name="default_merc">ГусьТоргусь</string>
 </resources>
