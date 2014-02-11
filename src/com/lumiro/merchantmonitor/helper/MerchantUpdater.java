@@ -21,8 +21,6 @@ public class MerchantUpdater {
 
     private Integer profit = 0;
 
-    private List<Item> items = new ArrayList<Item>();
-
     private Merc merc;
 
 
@@ -30,20 +28,17 @@ public class MerchantUpdater {
         this.merc = merc;
     }
 
-    public void updateItems(List<Item> new_items){
+    public List<Item> proceed_new_items(List<Item> new_items, List<Item> old_items){
         // Merchant offline
         if(0 == new_items.size()){
             is_offline = true;
-            merc.setItems(new ArrayList<Item>());
-            return;
+            return new_items;
         }
 
-        List<Item> old_items = merc.getItems();
         // Merchant online
         if( 0 == old_items.size()){
             is_new = true;
-            merc.setItems(new_items);
-            return;
+            return new_items;
         }
 
         ArrayList<String> old_items_checked = new ArrayList<String>(), new_items_checked = new ArrayList<String>();
@@ -57,6 +52,11 @@ public class MerchantUpdater {
                         && !new_items_checked.contains(new_hash+String.valueOf(j))
                         && old_hash.equals(new_hash)
                         ){
+                    if(new_items.get(j).getCount()
+                            > old_items.get(i).getNow_count()){
+                        is_new = true;
+                        return new_items;
+                    }
                     old_items_checked.add(old_hash+String.valueOf(i));
                     new_items_checked.add(new_hash+String.valueOf(j));
                     old_items.get(i).setNow_count(new_items.get(j).getCount());
@@ -80,7 +80,6 @@ public class MerchantUpdater {
                 old_item_found = false;
                 old_hash = item_hash(old_items.get(j));
                 if(new_hash.equals(old_hash)){
-                    Log.e(TAG, "Old "+old_items.get(j).getName());
                     old_item_found = true;
                     break;
                 }
@@ -91,7 +90,13 @@ public class MerchantUpdater {
                 break;
             }
         }
-        merc.setItems(old_items);
+        return old_items;
+    }
+
+    public void updateItems(List<Item> new_items){
+        List<Item> old_items = merc.getItems();
+        List<Item> summary_items = proceed_new_items(new_items, old_items);
+        merc.setItems(summary_items);
     }
 
     public boolean isOffline() {
