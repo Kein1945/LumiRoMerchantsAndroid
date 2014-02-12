@@ -93,10 +93,23 @@ public class MerchantUpdater {
         return old_items;
     }
 
+    public Integer getProfit() {
+        return profit;
+    }
+
     public void updateItems(List<Item> new_items){
         List<Item> old_items = merc.getItems();
         List<Item> summary_items = proceed_new_items(new_items, old_items);
+        profit = get_profit(old_items) - get_profit(summary_items);
         merc.setItems(summary_items);
+    }
+
+    private Integer get_profit(List<Item> items){
+        Integer profit = 0;
+        for(Item item : items){
+            profit += item.getProfit();
+        }
+        return profit;
     }
 
     public boolean isOffline() {
