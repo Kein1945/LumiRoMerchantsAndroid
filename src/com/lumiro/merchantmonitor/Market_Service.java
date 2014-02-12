@@ -94,6 +94,9 @@ public class Market_Service extends Service implements Runnable {
             Log.d(TAG, "Requested SYNC_MERC action ["+merchant_name+"]");
             DBAdaptor db = new DBAdaptor(this);
             List<Item> items = Parser.getItems(merchant_name);
+            if(null == items){
+                continue;
+            }
             Merc merc = db.getMercByName(merchant_name);
 
             MerchantUpdater updater = new MerchantUpdater(merc);

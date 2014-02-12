@@ -42,7 +42,7 @@ public class Parser {
             url += URLEncoder.encode(search, "utf-8");
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Search string encodeURI fail. "+search);
-            return "";
+            return null;
         }
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
@@ -52,7 +52,7 @@ public class Parser {
             response = client.execute(request);
         } catch (IOException e) {
             Log.e(TAG, "Get html failed. IOException");
-            return "";
+            return null;
         }
 
         String html = "";
@@ -61,13 +61,16 @@ public class Parser {
             html = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
             Log.e(TAG, "Read html failed. IOException");
-            return "";
+            return null;
         }
         return html;
     }
 
     public static List<Item> getItems(String search){
         String response = getSellItems(search);
+        if(response == null){
+            return null;
+        }
 
         List<Item> items = new ArrayList<Item>();
         Matcher m = getParser().matcher(response);
