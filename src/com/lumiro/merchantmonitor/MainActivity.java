@@ -2,9 +2,10 @@ package com.lumiro.merchantmonitor;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.lumiro.merchantmonitor.db.DBAdaptor;
@@ -12,12 +13,31 @@ import com.lumiro.merchantmonitor.db.DBAdaptor;
 import java.util.List;
 
 public class MainActivity extends Activity {
+    private static final String TAG = "net.lumiro.market.main_activity";
 
     public static final String EXTRA_MERCH = "com.lumiro.merchantmonitor.MERC_NAME";
 
     DBAdaptor db;
 
     ListView mercListView;
+
+    //Your activity will respond to this action String
+    public static final String UPDATE_MERC_LIST = "com.com.lumiro.merchantmonitor.UPDATE_MERC_LIST";
+    public static final String SHOW_TOAST = "com.com.lumiro.merchantmonitor.SHOW_TOAST";
+
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Recive intent: " + intent.getAction());
+            if(intent.getAction().equals(UPDATE_MERC_LIST)) {
+                sync_merc_list_with_db();
+            }
+            if(intent.getAction().equals(SHOW_TOAST)){
+                Log.d(TAG, intent.getStringExtra("toast"));
+                Toast.makeText(context, intent.getStringExtra("toast"), Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     /**
      * Called when the activity is first created.
@@ -70,6 +90,12 @@ public class MainActivity extends Activity {
                 MainActivity.this.startActivity(myIntent);
             }
         });
+
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UPDATE_MERC_LIST);
+        intentFilter.addAction(SHOW_TOAST);
+        bManager.registerReceiver(bReceiver, intentFilter);
     }
 
     public void addMerc(View view){

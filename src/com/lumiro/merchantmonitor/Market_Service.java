@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 import com.lumiro.merchantmonitor.Market.Parser;
@@ -69,13 +70,21 @@ public class Market_Service extends Service implements Runnable {
 
             if(updater.isNew()){
                 Log.d(TAG, "Merchant is new");
+                Intent RTReturn = new Intent(MainActivity.SHOW_TOAST);
+                RTReturn.putExtra("toast", "Merchant "+merc.getName()+" is new ");
+                LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
             }
             if(updater.isOffline()){
+                Intent RTReturn = new Intent(MainActivity.SHOW_TOAST);
+                RTReturn.putExtra("toast", "Merchant "+merc.getName()+" is offline");
+                LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
                 Log.d(TAG, "Merchant is offline");
             }
 
             db.updateMerc(merc);
             db.getMercByName(merchant_name);
         }
+        Intent RTReturn = new Intent(MainActivity.UPDATE_MERC_LIST);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
     }
 }
