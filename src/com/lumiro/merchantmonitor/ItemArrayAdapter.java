@@ -2,6 +2,7 @@ package com.lumiro.merchantmonitor;
 
 import android.content.Context;
 import android.graphics.drawable.ScaleDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,10 @@ public class ItemArrayAdapter extends ArrayAdapter<String> {
         textView.setText( item.getName() );
         countTextView.setText(String.valueOf(item.getNow_count()));
 
-        if(item.getNow_count() != item.getCount()){
+        if( (item.getCount() - item.getNow_count()) != 0){
             Integer profit = (item.getCount() - item.getNow_count()) * item.getPrice();
             profitTextView.setText("+"+String.valueOf( profit ));
+            Log.d("com.lumiro.merc", String.valueOf( item.getNow_count()) + " " + String.valueOf( item.getCount()));
         }
 
 
