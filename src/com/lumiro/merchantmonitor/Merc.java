@@ -38,4 +38,12 @@ public class Merc {
     public String toString(){
         return getName() + "(" + String.valueOf(getItems().size()) + ")";
     }
+
+    public Integer getProfit(){
+        Integer profit = 0;
+        for(Item item : getItems()){
+            profit += item.getProfit();
+        }
+        return profit;
+    }
 }
