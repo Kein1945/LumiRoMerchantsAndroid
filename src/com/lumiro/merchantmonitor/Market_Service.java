@@ -104,17 +104,12 @@ public class Market_Service extends Service implements Runnable {
 
             if(updater.isNew()){
                 Intent RTReturn = new Intent(MainActivity.SHOW_TOAST);
-                RTReturn.putExtra("toast", "Merchant "+merc.getName()+" is new ");
-                LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
-            }
-            if(updater.isOffline()){
-                Intent RTReturn = new Intent(MainActivity.SHOW_TOAST);
-                RTReturn.putExtra("toast", "Merchant " + merc.getName() + " is offline");
+                RTReturn.putExtra("toast", merc.getName()+" online ");
                 LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
             }
             if(updater.getProfit() > 0){
                 Intent RTReturn = new Intent(MainActivity.SHOW_TOAST);
-                RTReturn.putExtra("toast", "Merchant " + merc.getName() + " have income " + String.valueOf(updater.getProfit()));
+                RTReturn.putExtra("toast", merc.getName() + " +" + String.valueOf(updater.getProfit()));
                 LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
             }
 

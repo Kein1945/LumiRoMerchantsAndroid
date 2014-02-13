@@ -126,7 +126,6 @@ public class MainActivity extends Activity {
     }
 
     public void sync_merc_list_with_db(){
-        Toast.makeText(this, "Sync list", Toast.LENGTH_SHORT).show();
         List<Merc> mercs = db.getMercs();
         ArrayAdapter<Merc> adapter = (ArrayAdapter<Merc>) mercListView.getAdapter();
 
