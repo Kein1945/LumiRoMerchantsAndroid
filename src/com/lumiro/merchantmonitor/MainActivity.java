@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.lumiro.merchantmonitor.db.DBAdaptor;
+import com.lumiro.merchantmonitor.view.MerchantArrayAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -50,8 +52,9 @@ public class MainActivity extends Activity {
 
         db = new DBAdaptor(this);
 
-        ArrayAdapter<Merc> adapter = new ArrayAdapter<Merc>(this,
-                android.R.layout.simple_list_item_1);
+//        ArrayAdapter<Merc> adapter = new ArrayAdapter<Merc>(this,
+//                android.R.layout.simple_list_item_1);
+        MerchantArrayAdapter adapter = new MerchantArrayAdapter (this, new ArrayList());
         mercListView = (ListView)findViewById(R.id.listView);
         mercListView .setAdapter(adapter);
         mercListView.setClickable(true);
@@ -126,8 +129,10 @@ public class MainActivity extends Activity {
     }
 
     public void sync_merc_list_with_db(){
+//        ItemArrayAdapter adapter = new ItemArrayAdapter (this, (ArrayList)merc.getItems());
+
         List<Merc> mercs = db.getMercs();
-        ArrayAdapter<Merc> adapter = (ArrayAdapter<Merc>) mercListView.getAdapter();
+        MerchantArrayAdapter adapter = (MerchantArrayAdapter) mercListView.getAdapter();
 
         adapter.clear();
         for(Merc merc: mercs){
