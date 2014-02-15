@@ -49,7 +49,7 @@ public class ItemArrayAdapter extends ArrayAdapter<String> {
 
         int image_resource_id = this.getContext().getResources().getIdentifier("item_" + String.valueOf(item.getId()), "drawable", "com.lumiro.merchantmonitor");
         if(0 == image_resource_id){
-            image_resource_id = R.drawable.item_578;
+            image_resource_id = R.drawable.item_500;
         }
         imageView.setImageResource(image_resource_id);
 

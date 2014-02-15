@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 //                android.R.layout.simple_list_item_1);
         MerchantArrayAdapter adapter = new MerchantArrayAdapter (this, new ArrayList());
         mercListView = (ListView)findViewById(R.id.listView);
-        mercListView .setAdapter(adapter);
+        mercListView.setAdapter(adapter);
         mercListView.setClickable(true);
         sync_merc_list_with_db();
         final MainActivity self = this;
@@ -107,25 +107,29 @@ public class MainActivity extends Activity {
     }
 
     public void addMerc(View view){
-//        sync_merc_list_with_db();
-        Intent i = new Intent(this, Market_Service.class);
-        i.setAction(Market_Service.ACTION_SYNC_MERC);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.add_merc_dialog_title);
+        final EditText input = new EditText(this);
+        alert.setView(input);
 
-        String mercName = ((EditText)findViewById(R.id.new_merc)).getText().toString();
-        i.putExtra("merc_name", mercName);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                Intent i = new Intent(getApplicationContext(), Market_Service.class);
+                i.setAction(Market_Service.ACTION_SYNC_MERC);
+                i.putExtra("merc_name", value);
+                startService(i);
+            }
+        });
+        alert.setNegativeButton("Cancel", null);
 
-        startService(i);
+        alert.show();
     }
 
     public void updateMerchants(View view){
         Intent i = new Intent(this, Market_Service.class);
         i.setAction(Market_Service.ACTION_SYNC_MERCS);
         startService(i);
-    }
-
-
-    public void syncMercList(View view){
-        sync_merc_list_with_db();
     }
 
     public void sync_merc_list_with_db(){

@@ -8,29 +8,14 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/new_merc" android:text="@string/default_merc"
-                android:layout_weight="1"/>
+
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add"
                 android:id="@+id/add_merc_btn"
             android:onClick="addMerc" />
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sync"
-                android:id="@+id/sync_btn"
-                android:onClick="syncMercList"
-            android:textSize="18dp" />
+
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

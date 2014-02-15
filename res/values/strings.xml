@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">LumiRo Merchant Monitoring</string>
     <string name="confrim_delete_merc">Вы действительно хотите удалить "%s"?</string>
-    <string name="default_merc">ГусьТоргусь</string>
+    <string name="add_merc_dialog_title">Добавить торговца</string>
 </resources>

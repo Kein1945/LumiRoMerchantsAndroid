@@ -29,7 +29,7 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.item_row, parent, false);
+        View rowView = inflater.inflate(R.layout.merchant_row, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.label);
         TextView countTextView = (TextView) rowView.findViewById(R.id.count);
         TextView profitTextView = (TextView) rowView.findViewById(R.id.profit);
@@ -38,7 +38,9 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
         textView.setText( merc.getName() );
         countTextView.setText(String.valueOf(merc.getItems().size()));
 
-        profitTextView.setText("+"+String.valueOf( merc.getProfit() ));
+        Integer profit = merc.getProfit();
+        if( profit > 0)
+            profitTextView.setText("+"+String.valueOf( profit ));
 
 
         return rowView;
