@@ -36,7 +36,13 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
 
         Merc merc = (Merc)values.get(position);
         textView.setText( merc.getName() );
-        countTextView.setText(String.valueOf(merc.getItems().size()));
+        Integer items_count = merc.getItemsCount(); String item_count_label = "";
+        if(0 < items_count){
+            item_count_label = String.valueOf( items_count );
+        } else {
+            item_count_label = "";
+        }
+        countTextView.setText( item_count_label );
 
         Integer profit = merc.getProfit();
         if( profit > 0)

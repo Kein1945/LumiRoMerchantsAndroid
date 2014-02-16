@@ -39,6 +39,15 @@ public class Merc {
         return getName() + "(" + String.valueOf(getItems().size()) + ")";
     }
 
+    public Integer getItemsCount(){
+        Integer items_count = 0;
+        for(Item item : getItems()){
+            if(item.getNow_count() > 0)
+                items_count++;
+        }
+        return items_count;
+    }
+
     public Integer getProfit(){
         Integer profit = 0;
         for(Item item : getItems()){
