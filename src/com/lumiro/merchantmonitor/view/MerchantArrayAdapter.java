@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.lumiro.merchantmonitor.Merc;
 import com.lumiro.merchantmonitor.R;
@@ -37,6 +38,7 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
             holder.label = (TextView) rowView.findViewById(R.id.label);
             holder.count = (TextView) rowView.findViewById(R.id.count);
             holder.profit = (TextView) rowView.findViewById(R.id.profit);
+            holder.image_state = (ImageView) rowView.findViewById(R.id.image_state);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
@@ -47,14 +49,19 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
         Integer items_count = merc.getItemsCount(); String item_count_label = "";
         if(0 < items_count){
             item_count_label = String.valueOf( items_count );
+            holder.image_state.setBackgroundColor(getContext().getResources().getColor(R.color.online));
+            holder.count.setText( item_count_label );
+            Integer profit = merc.getProfit();
+            if( profit > 0){
+                holder.profit.setText("+"+String.valueOf( profit ));
+                holder.image_state.setBackgroundColor(getContext().getResources().getColor(R.color.profit));
+            } else {
+                holder.profit.setText("");
+            }
         } else {
-            item_count_label = "";
+            holder.count.setText("");
+            holder.image_state.setBackgroundColor(getContext().getResources().getColor(R.color.offline));
         }
-        holder.count.setText( item_count_label );
-
-        Integer profit = merc.getProfit();
-        if( profit > 0)
-            holder.profit.setText("+"+String.valueOf( profit ));
 
 
         return rowView;
@@ -64,5 +71,6 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
         protected TextView label;
         protected TextView count;
         protected TextView profit;
+        protected ImageView image_state;
     }
 }
