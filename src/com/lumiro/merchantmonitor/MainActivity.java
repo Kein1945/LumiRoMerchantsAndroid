@@ -88,10 +88,11 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
                 Merc merc = (Merc)mercListView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), merc.getName(), Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(MainActivity.this, MerchantActivity.class);
-                myIntent.putExtra(EXTRA_MERCH, merc.getName()); //Optional parameters
-                MainActivity.this.startActivity(myIntent);
+                if(merc.getItemsCount() > 0){
+                    Intent myIntent = new Intent(MainActivity.this, MerchantActivity.class);
+                    myIntent.putExtra(EXTRA_MERCH, merc.getName()); //Optional parameters
+                    MainActivity.this.startActivity(myIntent);
+                }
             }
         });
 
