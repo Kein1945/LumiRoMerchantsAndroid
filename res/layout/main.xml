@@ -4,25 +4,6 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add"
-                android:id="@+id/add_merc_btn"
-            android:onClick="addMerc" />
-
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Update merchants"
-                android:id="@+id/update_merchants"
-                android:onClick="updateMerchants" />
-    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

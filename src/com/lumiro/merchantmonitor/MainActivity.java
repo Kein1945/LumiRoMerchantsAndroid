@@ -5,9 +5,16 @@ import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 import com.lumiro.merchantmonitor.db.DBAdaptor;
 import com.lumiro.merchantmonitor.view.MerchantArrayAdapter;
 
@@ -107,32 +114,6 @@ public class MainActivity extends Activity {
         startService(i);
     }
 
-    public void addMerc(View view){
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(R.string.add_merc_dialog_title);
-        final EditText input = new EditText(this);
-        alert.setView(input);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString();
-                Intent i = new Intent(getApplicationContext(), Market_Service.class);
-                i.setAction(Market_Service.ACTION_SYNC_MERC);
-                i.putExtra("merc_name", value);
-                startService(i);
-            }
-        });
-        alert.setNegativeButton("Cancel", null);
-
-        alert.show();
-    }
-
-    public void updateMerchants(View view){
-        Intent i = new Intent(this, Market_Service.class);
-        i.setAction(Market_Service.ACTION_SYNC_MERCS);
-        startService(i);
-    }
-
     public void sync_merc_list_with_db(){
 //        ItemArrayAdapter adapter = new ItemArrayAdapter (this, (ArrayList)merc.getItems());
 
@@ -173,5 +154,53 @@ public class MainActivity extends Activity {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
         mNotificationManager.notify(1, mBuilder.build());
+    }
+
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+       // Inflate the menu items for use in the action bar
+       MenuInflater inflater = getMenuInflater();
+       inflater.inflate(R.menu.main_activity_actions, menu);
+       return super.onCreateOptionsMenu(menu);
+   }
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+       // Handle presses on the action bar items
+       switch (item.getItemId()) {
+           case R.id.action_sync:
+               updateMerchants();
+               return true;
+           case R.id.action_add_merc:
+               addMerc();
+               return true;
+           default:
+               return super.onOptionsItemSelected(item);
+       }
+   }
+
+    public void addMerc(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.add_merc_dialog_title);
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                Intent i = new Intent(getApplicationContext(), Market_Service.class);
+                i.setAction(Market_Service.ACTION_SYNC_MERC);
+                i.putExtra("merc_name", value);
+                startService(i);
+            }
+        });
+        alert.setNegativeButton("Cancel", null);
+
+        alert.show();
+    }
+
+    public void updateMerchants(){
+        Intent i = new Intent(this, Market_Service.class);
+        i.setAction(Market_Service.ACTION_SYNC_MERCS);
+        startService(i);
     }
 }
