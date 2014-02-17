@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import com.lumiro.merchantmonitor.db.DBAdaptor;
+import com.lumiro.merchantmonitor.view.ItemArrayAdapter;
 
 import java.util.ArrayList;
 

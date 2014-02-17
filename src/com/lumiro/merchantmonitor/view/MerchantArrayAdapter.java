@@ -27,28 +27,42 @@ public class MerchantArrayAdapter extends ArrayAdapter<Merc> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
+        ViewHolder holder;
+        View rowView = convertView;
+        if(convertView == null){
+            LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.merchant_row, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.label);
-        TextView countTextView = (TextView) rowView.findViewById(R.id.count);
-        TextView profitTextView = (TextView) rowView.findViewById(R.id.profit);
+            rowView = inflater.inflate(R.layout.merchant_row, parent, false);
+            holder = new ViewHolder();
+            holder.label = (TextView) rowView.findViewById(R.id.label);
+            holder.count = (TextView) rowView.findViewById(R.id.count);
+            holder.profit = (TextView) rowView.findViewById(R.id.profit);
+            rowView.setTag(holder);
+        } else {
+            holder = (ViewHolder) rowView.getTag();
+        }
 
         Merc merc = (Merc)values.get(position);
-        textView.setText( merc.getName() );
+        holder.label.setText( merc.getName() );
         Integer items_count = merc.getItemsCount(); String item_count_label = "";
         if(0 < items_count){
             item_count_label = String.valueOf( items_count );
         } else {
             item_count_label = "";
         }
-        countTextView.setText( item_count_label );
+        holder.count.setText( item_count_label );
 
         Integer profit = merc.getProfit();
         if( profit > 0)
-            profitTextView.setText("+"+String.valueOf( profit ));
+            holder.profit.setText("+"+String.valueOf( profit ));
 
 
         return rowView;
+    }
+
+    static class ViewHolder {
+        protected TextView label;
+        protected TextView count;
+        protected TextView profit;
     }
 }
