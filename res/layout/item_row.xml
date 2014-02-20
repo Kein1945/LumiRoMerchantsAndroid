@@ -17,8 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Item label"
-        android:textSize="18dp"
-        android:textIsSelectable="true">
+        android:textSize="18dp">
     </TextView>
     <TextView
         android:id="@+id/profit"
